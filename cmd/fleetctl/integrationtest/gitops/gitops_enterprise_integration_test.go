@@ -3552,7 +3552,7 @@ org_settings:
 			}))
 
 			if testCase.ShouldError {
-				fleetctl.RunAppCheckErr(t, []string{"gitops", "--config", fleetCfg.Name(), "-f", globalCfgFile.Name()}, "applying fleet config: PATCH /api/latest/fleet/config received status 422 Validation Failed: must be a valid hostname or IP address")
+				fleetctl.RunAppCheckErr(t, []string{"gitops", "--config", fleetCfg.Name(), "-f", globalCfgFile.Name()}, "applying fleet config: must be a valid hostname or IP address")
 			} else {
 				s.assertDryRunOutput(t, fleetctl.RunAppForTest(t, []string{"gitops", "--config", fleetCfg.Name(), "-f", globalCfgFile.Name(), "--dry-run"}))
 				s.assertRealRunOutput(t, fleetctl.RunAppForTest(t, []string{"gitops", "--config", fleetCfg.Name(), "-f", globalCfgFile.Name()}))

@@ -907,7 +907,7 @@ spec:
 		// enable_end_user_authentication is premium only
 		name = writeTmpYml(t, fmt.Sprintf(appConfigSpecEnableEndUserAuth, "true"))
 		RunAppCheckErr(t, []string{"apply", "-f", name},
-			`applying fleet config: PATCH /api/latest/fleet/config received status 422 Validation Failed: missing or invalid license`)
+			`applying fleet config: missing or invalid license`)
 		assert.False(t, ds.SetOrUpdateMDMAppleSetupAssistantFuncInvoked)
 		assert.False(t, ds.GetMDMAppleBootstrapPackageMetaFuncInvoked)
 		assert.False(t, ds.InsertMDMAppleBootstrapPackageFuncInvoked)
@@ -1523,7 +1523,7 @@ spec:
   team:
     name: ""
 `,
-			wantErr: `422 Validation Failed: name may not be empty`,
+			wantErr: `name may not be empty`,
 		},
 		{
 			desc: "invalid agent options for existing team",
@@ -1537,7 +1537,7 @@ spec:
       config:
         blah: nope
 `,
-			wantErr: `400 Bad Request: unsupported key provided: "blah"`,
+			wantErr: `unsupported key provided: "blah"`,
 		},
 		{
 			desc: "invalid top-level key for team",
@@ -1549,7 +1549,7 @@ spec:
     name: team1
     blah: nope
 `,
-			wantErr: `400 Bad Request: unsupported key provided: "blah"`,
+			wantErr: `unsupported key provided: "blah"`,
 		},
 		{
 			desc: "invalid known key's value type for team cannot be forced",
@@ -1561,7 +1561,7 @@ spec:
     name: 123
 `,
 			flags:   []string{"--force"},
-			wantErr: `400 Bad Request: invalid value type at 'specs.name': expected string but got number`,
+			wantErr: `invalid value type at 'specs.name': expected string but got number`,
 		},
 		{
 			desc: "unknown key for team can be forced",
@@ -1588,7 +1588,7 @@ spec:
       config:
         blah: nope
 `,
-			wantErr: `400 Bad Request: unsupported key provided: "blah"`,
+			wantErr: `unsupported key provided: "blah"`,
 		},
 		{
 			desc: "invalid agent options dry-run",
@@ -1603,7 +1603,7 @@ spec:
         blah: nope
 `,
 			flags:   []string{"--dry-run"},
-			wantErr: `400 Bad Request: unsupported key provided: "blah"`,
+			wantErr: `unsupported key provided: "blah"`,
 		},
 		{
 			desc: "invalid agent options force",
@@ -1634,7 +1634,7 @@ spec:
           aws_debug: 123
 `,
 			flags:   []string{"--dry-run"},
-			wantErr: `400 Bad Request: invalid value type at 'options.aws_debug': expected bool but got number`,
+			wantErr: `invalid value type at 'options.aws_debug': expected bool but got number`,
 		},
 		{
 			desc: "invalid team agent options command-line flag",
@@ -1648,7 +1648,7 @@ spec:
       command_line_flags:
         no_such_flag: 123
 `,
-			wantErr: `400 Bad Request: unsupported key provided: "no_such_flag"`,
+			wantErr: `unsupported key provided: "no_such_flag"`,
 		},
 		{
 			desc: "valid team agent options command-line flag",
@@ -1682,7 +1682,7 @@ spec:
             options:
               aws_debug: 123
 `,
-			wantErr: `400 Bad Request: invalid value type at 'options.aws_debug': expected bool but got number`,
+			wantErr: `invalid value type at 'options.aws_debug': expected bool but got number`,
 		},
 		{
 			desc: "empty config",
@@ -1702,7 +1702,7 @@ spec:
   org_info:
     org_name: ""
 `,
-			wantErr: `422 Validation Failed: organization name must be present`,
+			wantErr: `organization name must be present`,
 		},
 		{
 			desc: "config with blank required server url",
@@ -1713,7 +1713,7 @@ spec:
   server_settings:
     server_url: ""
 `,
-			wantErr: `422 Validation Failed: Fleet server URL must be present`,
+			wantErr: `Fleet server URL must be present`,
 		},
 		{
 			desc: "config with unknown key",
@@ -1724,7 +1724,7 @@ spec:
   server_settings:
     foo: bar
 `,
-			wantErr: `400 Bad Request: unsupported key provided: "foo"`,
+			wantErr: `unsupported key provided: "foo"`,
 		},
 		{
 			desc: "config with invalid key type",
@@ -1735,7 +1735,7 @@ spec:
   server_settings:
     server_url: 123
 `,
-			wantErr: `400 Bad request: failed to decode app config`,
+			wantErr: `failed to decode app config`,
 		},
 		{
 			desc: "config with invalid agent options in dry-run",
@@ -1747,7 +1747,7 @@ spec:
     foo: bar
 `,
 			flags:   []string{"--dry-run"},
-			wantErr: `400 Bad Request: unsupported key provided: "foo"`,
+			wantErr: `unsupported key provided: "foo"`,
 		},
 		{
 			desc: "config with invalid agent options data type in dry-run",
@@ -1761,7 +1761,7 @@ spec:
         aws_debug: 123
 `,
 			flags:   []string{"--dry-run"},
-			wantErr: `400 Bad Request: invalid value type at 'options.aws_debug': expected bool but got number`,
+			wantErr: `invalid value type at 'options.aws_debug': expected bool but got number`,
 		},
 		{
 			desc: "config with invalid agent options data type with force",
@@ -1788,7 +1788,7 @@ spec:
       enable_tables: "foo"
       no_such_flag: false
 `,
-			wantErr: `400 Bad Request: unsupported key provided: "no_such_flag"`,
+			wantErr: `unsupported key provided: "no_such_flag"`,
 		},
 		{
 			desc: "config with invalid value for agent options command-line flags",
@@ -1800,7 +1800,7 @@ spec:
     command_line_flags:
       enable_tables: 123
 `,
-			wantErr: `400 Bad Request: invalid value type at 'enable_tables': expected string but got number`,
+			wantErr: `invalid value type at 'enable_tables': expected string but got number`,
 		},
 		{
 			desc: "config with valid agent options command-line flags",
@@ -1848,7 +1848,7 @@ spec:
     enable_software_inventory: true
 `,
 			flags:      []string{"--dry-run"},
-			wantErr:    `400 Bad request: warning: deprecated settings were used in the configuration: [host_settings]`,
+			wantErr:    `warning: deprecated settings were used in the configuration: [host_settings]`,
 			wantOutput: `[!] ignoring labels, dry run mode only supported for 'config' and 'fleet' spec`,
 		},
 		{
@@ -1889,7 +1889,7 @@ spec:
       macos_updates:
         deadline: 2022-01-04
 `,
-			wantErr: `422 Validation Failed: minimum_version is required when deadline is provided`,
+			wantErr: `minimum_version is required when deadline is provided`,
 		},
 		{
 			desc: "macos_updates minimum_version set but deadline empty",
@@ -1903,7 +1903,7 @@ spec:
       macos_updates:
         minimum_version: "12.2"
 `,
-			wantErr: `422 Validation Failed: deadline is required when minimum_version is provided`,
+			wantErr: `deadline is required when minimum_version is provided`,
 		},
 		{
 			desc: "macos_updates.minimum_version with build version",
@@ -1918,7 +1918,7 @@ spec:
         minimum_version: "12.2 (ABCD)"
         deadline: 1892-01-01
 `,
-			wantErr: `422 Validation Failed: minimum_version accepts version numbers only. (E.g., "13.0.1.") NOT "Ventura 13" or "13.0.1 (22A400)"`,
+			wantErr: `minimum_version accepts version numbers only. (E.g., "13.0.1.") NOT "Ventura 13" or "13.0.1 (22A400)"`,
 		},
 		{
 			desc: "macos_updates.deadline with timestamp",
@@ -1933,7 +1933,7 @@ spec:
         minimum_version: "12.2"
         deadline: "1892-01-01T00:00:00Z"
 `,
-			wantErr: fmt.Sprintf(`422 Validation Failed: %s`, fleet.AppleOSVersionDeadlineInvalidMessage),
+			wantErr: fmt.Sprintf(`%s`, fleet.AppleOSVersionDeadlineInvalidMessage),
 		},
 		{
 			desc: "macos_updates.deadline with invalid date",
@@ -1948,7 +1948,7 @@ spec:
         minimum_version: "12.2"
         deadline: "18-01-01"
 `,
-			wantErr: fmt.Sprintf(`422 Validation Failed: %s`, fleet.AppleOSVersionDeadlineInvalidMessage),
+			wantErr: fmt.Sprintf(`%s`, fleet.AppleOSVersionDeadlineInvalidMessage),
 		},
 		{
 			desc: "macos_updates.deadline with incomplete date",
@@ -1963,7 +1963,7 @@ spec:
         minimum_version: "12.2"
         deadline: "2022-01"
 `,
-			wantErr: fmt.Sprintf(`422 Validation Failed: %s`, fleet.AppleOSVersionDeadlineInvalidMessage),
+			wantErr: fmt.Sprintf(`%s`, fleet.AppleOSVersionDeadlineInvalidMessage),
 		},
 		{
 			desc: "windows_updates.deadline_days but grace period empty",
@@ -1977,7 +1977,7 @@ spec:
       windows_updates:
         deadline_days: 5
 `,
-			wantErr: `422 Validation Failed: grace_period_days is required when deadline_days is provided`,
+			wantErr: `grace_period_days is required when deadline_days is provided`,
 		},
 		{
 			desc: "windows_updates.grace_period_days but deadline empty",
@@ -1991,7 +1991,7 @@ spec:
       windows_updates:
         grace_period_days: 5
 `,
-			wantErr: `422 Validation Failed: deadline_days is required when grace_period_days is provided`,
+			wantErr: `deadline_days is required when grace_period_days is provided`,
 		},
 		{
 			desc: "windows_updates.deadline_days out of range",
@@ -2006,7 +2006,7 @@ spec:
         deadline_days: 9999
         grace_period_days: 1
 `,
-			wantErr: `422 Validation Failed: deadline_days must be an integer between 0 and 30`,
+			wantErr: `deadline_days must be an integer between 0 and 30`,
 		},
 		{
 			desc: "windows_updates.grace_period_days out of range",
@@ -2021,7 +2021,7 @@ spec:
         deadline_days: 1
         grace_period_days: 9999
 `,
-			wantErr: `422 Validation Failed: grace_period_days must be an integer between 0 and 7`,
+			wantErr: `grace_period_days must be an integer between 0 and 7`,
 		},
 		{
 			desc: "windows_updates.deadline_days not a number",
@@ -2036,7 +2036,7 @@ spec:
         deadline_days: abc
         grace_period_days: 1
 `,
-			wantErr: `400 Bad Request: invalid value type at 'specs.mdm.windows_updates.deadline_days': expected int but got string`,
+			wantErr: `invalid value type at 'specs.mdm.windows_updates.deadline_days': expected int but got string`,
 		},
 		{
 			desc: "windows_updates.grace_period_days not a number",
@@ -2051,7 +2051,7 @@ spec:
         deadline_days: 1
         grace_period_days: true
 `,
-			wantErr: `400 Bad Request: invalid value type at 'specs.mdm.windows_updates.grace_period_days': expected int but got bool`,
+			wantErr: `invalid value type at 'specs.mdm.windows_updates.grace_period_days': expected int but got bool`,
 		},
 		{
 			desc: "windows_updates valid",
@@ -2096,7 +2096,7 @@ spec:
     idp_name: "SimpleSAML"
     metadata_url: "%s"
 `, testSAMLIDPMetadataURL),
-			wantErr: `422 Validation Failed: required`,
+			wantErr: `required`,
 		},
 		{
 			desc: "missing required sso idp_name",
@@ -2111,7 +2111,7 @@ spec:
     idp_name: ""
     metadata_url: "%s"
 `, testSAMLIDPMetadataURL),
-			wantErr: `422 Validation Failed: required`,
+			wantErr: `required`,
 		},
 		{
 			desc: "missing required failing policies destination_url",
@@ -2128,7 +2128,7 @@ spec:
       host_batch_size: 1000
     interval: 1h
 `,
-			wantErr: `422 Validation Failed: destination_url is required to enable the failing policies webhook`,
+			wantErr: `destination_url is required to enable the failing policies webhook`,
 		},
 		{
 			desc: "missing required vulnerabilities destination_url",
@@ -2143,7 +2143,7 @@ spec:
       host_batch_size: 1000
     interval: 1h
 `,
-			wantErr: `422 Validation Failed: destination_url is required to enable the vulnerabilities webhook`,
+			wantErr: `destination_url is required to enable the vulnerabilities webhook`,
 		},
 		{
 			desc: "missing required host status destination_url",
@@ -2159,7 +2159,7 @@ spec:
       host_percentage: 10
     interval: 1h
 `,
-			wantErr: `422 Validation Failed: destination_url is required to enable the host status webhook`,
+			wantErr: `destination_url is required to enable the host status webhook`,
 		},
 		{
 			desc: "missing required host status days_count",
@@ -2175,7 +2175,7 @@ spec:
       host_percentage: 10
     interval: 1h
 `,
-			wantErr: `422 Validation Failed: days_count must be > 0 to enable the host status webhook`,
+			wantErr: `days_count must be > 0 to enable the host status webhook`,
 		},
 		{
 			desc: "missing required host status host_percentage",
@@ -2191,7 +2191,7 @@ spec:
       host_percentage: -1
     interval: 1h
 `,
-			wantErr: `422 Validation Failed: host_percentage must be > 0 to enable the host status webhook`,
+			wantErr: `host_percentage must be > 0 to enable the host status webhook`,
 		},
 		{
 			desc: "config with FIM values for agent options (#8699)",
@@ -2220,7 +2220,7 @@ spec:
     macos_updates:
       deadline: 2022-01-04
 `,
-			wantErr: `422 Validation Failed: minimum_version is required when deadline is provided`,
+			wantErr: `minimum_version is required when deadline is provided`,
 		},
 		{
 			desc: "app config macos_updates minimum_version set but deadline empty",
@@ -2232,7 +2232,7 @@ spec:
     macos_updates:
       minimum_version: "12.2"
 `,
-			wantErr: `422 Validation Failed: deadline is required when minimum_version is provided`,
+			wantErr: `deadline is required when minimum_version is provided`,
 		},
 		{
 			desc: "app config macos_updates.minimum_version with build version",
@@ -2245,7 +2245,7 @@ spec:
       minimum_version: "12.2 (ABCD)"
       deadline: 1892-01-01
 `,
-			wantErr: `422 Validation Failed: minimum_version accepts version numbers only. (E.g., "13.0.1.") NOT "Ventura 13" or "13.0.1 (22A400)"`,
+			wantErr: `minimum_version accepts version numbers only. (E.g., "13.0.1.") NOT "Ventura 13" or "13.0.1 (22A400)"`,
 		},
 		{
 			desc: "app config macos_updates.deadline with timestamp",
@@ -2258,7 +2258,7 @@ spec:
       minimum_version: "12.2"
       deadline: "1892-01-01T00:00:00Z"
 `,
-			wantErr: fmt.Sprintf(`422 Validation Failed: %s`, fleet.AppleOSVersionDeadlineInvalidMessage),
+			wantErr: fmt.Sprintf(`%s`, fleet.AppleOSVersionDeadlineInvalidMessage),
 		},
 		{
 			desc: "app config macos_updates.deadline with invalid date",
@@ -2271,7 +2271,7 @@ spec:
       minimum_version: "12.2"
       deadline: "18-01-01"
 `,
-			wantErr: fmt.Sprintf(`422 Validation Failed: %s`, fleet.AppleOSVersionDeadlineInvalidMessage),
+			wantErr: fmt.Sprintf(`%s`, fleet.AppleOSVersionDeadlineInvalidMessage),
 		},
 		{
 			desc: "app config macos_updates.deadline with incomplete date",
@@ -2284,7 +2284,7 @@ spec:
       minimum_version: "12.2"
       deadline: "2022-01"
 `,
-			wantErr: fmt.Sprintf(`422 Validation Failed: %s`, fleet.AppleOSVersionDeadlineInvalidMessage),
+			wantErr: fmt.Sprintf(`%s`, fleet.AppleOSVersionDeadlineInvalidMessage),
 		},
 		{
 			desc: "app config windows_updates.deadline_days but grace period empty",
@@ -2296,7 +2296,7 @@ spec:
     windows_updates:
       deadline_days: 5
 `,
-			wantErr: `422 Validation Failed: grace_period_days is required when deadline_days is provided`,
+			wantErr: `grace_period_days is required when deadline_days is provided`,
 		},
 		{
 			desc: "app config windows_updates.grace_period_days but deadline empty",
@@ -2308,7 +2308,7 @@ spec:
     windows_updates:
       grace_period_days: 5
 `,
-			wantErr: `422 Validation Failed: deadline_days is required when grace_period_days is provided`,
+			wantErr: `deadline_days is required when grace_period_days is provided`,
 		},
 		{
 			desc: "app config windows_updates.deadline_days out of range",
@@ -2321,7 +2321,7 @@ spec:
       deadline_days: 9999
       grace_period_days: 1
 `,
-			wantErr: `422 Validation Failed: deadline_days must be an integer between 0 and 30`,
+			wantErr: `deadline_days must be an integer between 0 and 30`,
 		},
 		{
 			desc: "app config windows_updates.grace_period_days out of range",
@@ -2334,7 +2334,7 @@ spec:
       deadline_days: 1
       grace_period_days: 9999
 `,
-			wantErr: `422 Validation Failed: grace_period_days must be an integer between 0 and 7`,
+			wantErr: `grace_period_days must be an integer between 0 and 7`,
 		},
 		{
 			desc: "app config windows_updates.deadline_days not a number",
@@ -2347,7 +2347,7 @@ spec:
       deadline_days: abc
       grace_period_days: 1
 `,
-			wantErr: `400 Bad request: failed to decode app config`,
+			wantErr: `failed to decode app config`,
 		},
 		{
 			desc: "app config windows_updates.grace_period_days not a number",
@@ -2360,7 +2360,7 @@ spec:
       deadline_days: 1
       grace_period_days: true
 `,
-			wantErr: `400 Bad request: failed to decode app config`,
+			wantErr: `failed to decode app config`,
 		},
 		{
 			desc: "app config windows_updates valid",
@@ -2410,7 +2410,7 @@ spec:
     macos_settings:
       enable_disk_encryption: 123
 `,
-			wantErr: `400 Bad request: failed to decode app config`,
+			wantErr: `failed to decode app config`,
 		},
 		{
 			desc: "app config macos_settings.enable_disk_encryption true",
@@ -2450,7 +2450,7 @@ spec:
       macos_settings:
         enable_disk_encryption:
 `,
-			wantErr: `400 Bad Request: invalid value type at 'macos_settings.enable_disk_encryption': expected bool but got <nil>`,
+			wantErr: `invalid value type at 'macos_settings.enable_disk_encryption': expected bool but got <nil>`,
 		},
 		{
 			desc: "team config macos_settings.enable_disk_encryption with invalid value type",
@@ -2464,7 +2464,7 @@ spec:
       macos_settings:
         enable_disk_encryption: 123
 `,
-			wantErr: `400 Bad Request: invalid value type at 'macos_settings.enable_disk_encryption': expected bool but got float64`,
+			wantErr: `invalid value type at 'macos_settings.enable_disk_encryption': expected bool but got float64`,
 		},
 		{
 			desc: "team config macos_settings.enable_disk_encryption true",
@@ -2529,7 +2529,7 @@ spec:
   mdm:
     windows_enabled_and_configured: true
 `,
-			wantErr: `422 Validation Failed: Couldn't turn on Windows MDM. Please configure Fleet with a certificate and key pair first.`,
+			wantErr: `Couldn't turn on Windows MDM. Please configure Fleet with a certificate and key pair first.`,
 		},
 		{
 			desc: "activities_webhook empty destination_url",
@@ -2542,7 +2542,7 @@ spec:
       enable_activities_webhook: true
       destination_url: ""
 `,
-			wantErr: `422 Validation Failed: destination_url is required`,
+			wantErr: `destination_url is required`,
 		},
 		{
 			desc: "activities_webhook bad destination_url 1",
@@ -2555,7 +2555,7 @@ spec:
       enable_activities_webhook: true
       destination_url: ftp://host
 `,
-			wantErr: `422 Validation Failed: destination_url must be http`,
+			wantErr: `destination_url must be http`,
 		},
 		{
 			desc: "activities_webhook bad destination_url 2",
@@ -2568,7 +2568,7 @@ spec:
       enable_activities_webhook: true
       destination_url: /foo
 `,
-			wantErr: `422 Validation Failed: destination_url must be http`,
+			wantErr: `destination_url must be http`,
 		},
 		{
 			desc: "activities_webhook bad destination_url 3",
@@ -2581,7 +2581,7 @@ spec:
       enable_activities_webhook: true
       destination_url: foo
 `,
-			wantErr: `422 Validation Failed: parse "foo": invalid URI`,
+			wantErr: `parse "foo": invalid URI`,
 		},
 	}
 	// NOTE: Integrations required fields are not tested (Jira/Zendesk) because

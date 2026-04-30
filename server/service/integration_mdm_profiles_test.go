@@ -2341,7 +2341,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMAppleProfiles() {
 			mobileconfigForTest(p, p),
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: payload identifier %s is not allowed", p))
+		require.Contains(t, errMsg, fmt.Sprintf("payload identifier %s is not allowed", p))
 	}
 
 	// payloads with reserved types
@@ -2358,7 +2358,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMAppleProfiles() {
 		case mobileconfig.FleetFileVaultPayloadType, mobileconfig.FleetRecoveryKeyEscrowPayloadType:
 			assert.Contains(t, errMsg, mobileconfig.DiskEncryptionProfileRestrictionErrMsg)
 		default:
-			assert.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadType(s): %s", p))
+			assert.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadType(s): %s", p))
 		}
 	}
 
@@ -2368,7 +2368,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMAppleProfiles() {
 			mobileconfigForTestWithContent("N1", "I1", p, "random", ""),
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadIdentifier(s): %s", p))
+		require.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadIdentifier(s): %s", p))
 	}
 
 	// successfully apply a profile for the team
@@ -4730,7 +4730,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfiles() {
 	// Profile is too big
 	resp := s.Do("POST", "/api/v1/fleet/mdm/profiles/batch", batchSetMDMProfilesRequest{Profiles: []fleet.MDMProfileBatchPayload{{Contents: []byte(bigString)}}},
 		http.StatusUnprocessableEntity)
-	require.Contains(t, extractServerErrorText(resp.Body), "Validation Failed: maximum configuration profile file size is 1 MB")
+	require.Contains(t, extractServerErrorText(resp.Body), "maximum configuration profile file size is 1 MB")
 
 	// invalid profile (bad mobileconfig)
 	resp = s.Do("POST", "/api/v1/fleet/mdm/profiles/batch", batchSetMDMProfilesRequest{Profiles: []fleet.MDMProfileBatchPayload{
@@ -4743,7 +4743,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfiles() {
 	<array/>`),
 		},
 	}}, http.StatusUnprocessableEntity)
-	require.Contains(t, extractServerErrorText(resp.Body), "Validation Failed: new MDMAppleConfigProfile: plist: error parsing XML property list: XML syntax error")
+	require.Contains(t, extractServerErrorText(resp.Body), "new MDMAppleConfigProfile: plist: error parsing XML property list: XML syntax error")
 
 	// apply an empty set to no-team
 	s.Do("POST", "/api/v1/fleet/mdm/profiles/batch", batchSetMDMProfilesRequest{Profiles: nil}, http.StatusNoContent)
@@ -4789,7 +4789,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfiles() {
 			{Name: "N4", Contents: declarationForTest("D1")},
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: payload identifier %s is not allowed", p))
+		require.Contains(t, errMsg, fmt.Sprintf("payload identifier %s is not allowed", p))
 	}
 
 	// payloads with reserved types
@@ -4808,7 +4808,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfiles() {
 		case mobileconfig.FleetFileVaultPayloadType, mobileconfig.FleetRecoveryKeyEscrowPayloadType:
 			assert.Contains(t, errMsg, mobileconfig.DiskEncryptionProfileRestrictionErrMsg)
 		default:
-			assert.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadType(s): %s", p))
+			assert.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadType(s): %s", p))
 		}
 	}
 
@@ -4820,7 +4820,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfiles() {
 			{Name: "N4", Contents: declarationForTest("D1")},
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadIdentifier(s): %s", p))
+		require.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadIdentifier(s): %s", p))
 	}
 
 	// profiles with forbidden declaration types
@@ -5042,7 +5042,7 @@ func (s *integrationMDMTestSuite) TestBatchModifyMDMProfiles() {
 	// Profile is too big
 	resp := s.Do("POST", "/api/latest/fleet/configuration_profiles/batch", batchModifyMDMConfigProfilesRequest{ConfigurationProfiles: []fleet.BatchModifyMDMConfigProfilePayload{{Profile: []byte(bigString)}}},
 		http.StatusUnprocessableEntity)
-	require.Contains(t, extractServerErrorText(resp.Body), "Validation Failed: maximum configuration profile file size is 1 MB")
+	require.Contains(t, extractServerErrorText(resp.Body), "maximum configuration profile file size is 1 MB")
 
 	// apply an empty set to no-team
 	s.Do("POST", "/api/latest/fleet/configuration_profiles/batch", batchModifyMDMConfigProfilesRequest{ConfigurationProfiles: nil}, http.StatusNoContent)
@@ -5088,7 +5088,7 @@ func (s *integrationMDMTestSuite) TestBatchModifyMDMProfiles() {
 			{DisplayName: "N4", Profile: declarationForTest("D1")},
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: payload identifier %s is not allowed", p))
+		require.Contains(t, errMsg, fmt.Sprintf("payload identifier %s is not allowed", p))
 	}
 
 	// payloads with reserved types
@@ -5107,7 +5107,7 @@ func (s *integrationMDMTestSuite) TestBatchModifyMDMProfiles() {
 		case mobileconfig.FleetFileVaultPayloadType, mobileconfig.FleetRecoveryKeyEscrowPayloadType:
 			assert.Contains(t, errMsg, mobileconfig.DiskEncryptionProfileRestrictionErrMsg)
 		default:
-			assert.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadType(s): %s", p))
+			assert.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadType(s): %s", p))
 		}
 	}
 
@@ -5119,7 +5119,7 @@ func (s *integrationMDMTestSuite) TestBatchModifyMDMProfiles() {
 			{DisplayName: "N4", Profile: declarationForTest("D1")},
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadIdentifier(s): %s", p))
+		require.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadIdentifier(s): %s", p))
 	}
 
 	// profiles with forbidden declaration types
@@ -5394,7 +5394,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfilesBackwardsCompat() {
 			"N3": syncMLForTest("./Foo/Bar"),
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: payload identifier %s is not allowed", p))
+		require.Contains(t, errMsg, fmt.Sprintf("payload identifier %s is not allowed", p))
 	}
 
 	// payloads with reserved types
@@ -5412,7 +5412,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfilesBackwardsCompat() {
 		case mobileconfig.FleetFileVaultPayloadType, mobileconfig.FleetRecoveryKeyEscrowPayloadType:
 			assert.Contains(t, errMsg, mobileconfig.DiskEncryptionProfileRestrictionErrMsg)
 		default:
-			assert.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadType(s): %s", p))
+			assert.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadType(s): %s", p))
 		}
 	}
 
@@ -5423,7 +5423,7 @@ func (s *integrationMDMTestSuite) TestBatchSetMDMProfilesBackwardsCompat() {
 			"N3": syncMLForTest("./Foo/Bar"),
 		}}, http.StatusUnprocessableEntity, "team_id", fmt.Sprint(tm.ID))
 		errMsg := extractServerErrorText(res.Body)
-		require.Contains(t, errMsg, fmt.Sprintf("Validation Failed: unsupported PayloadIdentifier(s): %s", p))
+		require.Contains(t, errMsg, fmt.Sprintf("unsupported PayloadIdentifier(s): %s", p))
 	}
 
 	// profiles with reserved Windows location URIs

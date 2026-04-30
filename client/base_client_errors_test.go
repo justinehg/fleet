@@ -16,7 +16,7 @@ func TestExtractServerErrorText(t *testing.T) {
 		{
 			name:     "valid JSON error",
 			body:     `{"message": "Something went wrong", "errors": [{"name": "error1", "reason": "invalid input"}]}`,
-			expected: "Something went wrong: invalid input",
+			expected: "invalid input",
 		},
 		{
 			name:     "403 Forbidden HTML",

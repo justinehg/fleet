@@ -64,11 +64,12 @@ func (bc *BaseClient) ParseResponse(verb, path string, response *http.Response, 
 			break
 		}
 
-		e := &StatusCodeErr{
+		return &StatusCodeErr{
 			Code: response.StatusCode,
 			Body: ExtractServerErrorText(response.Body),
+			Verb: verb,
+			Path: path,
 		}
-		return fmt.Errorf("%s %s received status %w", verb, path, e)
 	}
 
 	bc.SetServerCapabilities(response)

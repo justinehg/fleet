@@ -176,7 +176,10 @@ func ExtractServerErrorNameReason(body io.Reader) (string, string) {
 	errName := ""
 	errReason := serverErr.Message
 	if len(serverErr.Errors) > 0 {
-		errReason += ": " + serverErr.Errors[0].Reason
+		// Prefer the detailed reason on its own — the top-level Message
+		// is generic boilerplate ("Validation Failed", "Bad Request",
+		// etc.) that adds noise without information.
+		errReason = serverErr.Errors[0].Reason
 		errName = serverErr.Errors[0].Name
 	}
 
@@ -202,10 +205,16 @@ func ExtractServerErrorNameReasons(body io.Reader) ([]string, []string) {
 type StatusCodeErr struct {
 	Code int
 	Body string
+	// Verb and Path are populated by the HTTP client and preserved for
+	// callers that want to inspect the failing request (e.g. for debug
+	// logging). They are intentionally omitted from Error() so user-facing
+	// CLI output stays focused on the human-readable reason.
+	Verb string
+	Path string
 }
 
 func (e *StatusCodeErr) Error() string {
-	return fmt.Sprintf("%d %s", e.Code, e.Body)
+	return e.Body
 }
 
 func (e *StatusCodeErr) StatusCode() int {

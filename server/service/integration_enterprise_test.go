@@ -7524,7 +7524,7 @@ func (s *integrationEnterpriseTestSuite) TestRunHostScript() {
 	// attempt to run an empty script
 	res := s.Do("POST", "/api/latest/fleet/scripts/run", fleet.HostScriptRequestPayload{HostID: host.ID, ScriptContents: ""}, http.StatusUnprocessableEntity)
 	errMsg := extractServerErrorText(res.Body)
-	require.Contains(t, errMsg, "Validation Failed: One of 'script_id', 'script_contents', or 'script_name' is required.")
+	require.Contains(t, errMsg, "One of 'script_id', 'script_contents', or 'script_name' is required.")
 
 	// attempt to run an overly long script
 	res = s.Do("POST", "/api/latest/fleet/scripts/run", fleet.HostScriptRequestPayload{HostID: host.ID, ScriptContents: strings.Repeat("a", fleet.UnsavedScriptMaxRuneLen+1)}, http.StatusUnprocessableEntity)
@@ -8730,7 +8730,7 @@ func (s *integrationEnterpriseTestSuite) TestSavedScripts() {
 		"not_sh.txt", []byte(`echo "hello"`), s.token, nil)
 	res = s.DoRawWithHeaders("POST", "/api/latest/fleet/scripts", body.Bytes(), http.StatusUnprocessableEntity, headers)
 	errMsg = extractServerErrorText(res.Body)
-	require.Contains(t, errMsg, "Validation Failed: File type not supported. Only .sh, .py, and .ps1 file types are allowed.")
+	require.Contains(t, errMsg, "File type not supported. Only .sh, .py, and .ps1 file types are allowed.")
 
 	// file content is empty
 	body, headers = generateNewScriptMultipartRequest(t,
